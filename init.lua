@@ -1,3 +1,9 @@
+-- vim.g.transparent_groups = vim.list_extend(
+--   vim.g.transparent_groups or {},
+--   vim.tbl_map(function(v)
+--     return v.hl_group
+--   end, vim.tbl_values(require('bufferline.config').highlights))
+-- )
 return {
   -- Configure AstroNvim updates
   updater = {
@@ -18,7 +24,7 @@ return {
   },
 
   -- Set colorscheme to use
-  colorscheme = "astrodark",
+  colorscheme = "tokyonight",
 
   -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
   diagnostics = {

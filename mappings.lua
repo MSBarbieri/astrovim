@@ -1,17 +1,58 @@
+local utils = require "astronvim.utils"
 -- Mapping data with "desc" stored directly by vim.keymap.set().
 --
 -- Please use this mappings table to set keyboard mapping since this is the
 -- lower level configuration and more robust one. (which-key will
 -- automatically pick-up stored data by this setting.)
 local code = {
-  ["<leader>."] = { name = "code" },
+  ["<leader>c"] = { "<cmd><cr>", name = "code" },
+  ["<leader>cr"] = { vim.lsp.buf.rename, desc = "Rename" },
+  ["<leader>ca"] = { vim.lsp.buf.code_action, desc = "Code Action" },
+  ["<leader>c,"] = { vim.lsp.buf.format, desc = "Format" },
+  ["<leader>cc"] = { vim.lsp.buf.signature_help, desc = "Signature Help" },
+  ["<leader>ce"] = { vim.diagnostic.setloclist, desc = "Quickfix" },
+  ["<leader>ch"] = { vim.diagnostic.goto_prev, desc = "Prev Diagnostics" },
+  ["<leader>cl"] = { vim.diagnostic.goto_next, desc = "Next Diagnostics" },
+  ["<leader>cd"] = { "<cmd>Telescope diagnostics<cr>", desc = "Diagnostics" },
+  ["<leader>c."] = { function()
+    local config = vim.diagnostic.config()
+    config.scope = "line"
+    vim.diagnostic.open_float(config)
+  end, desc = "Line Diagnostics" },
+  ["<leader>c/"] = { function()
+    local lang = vim.bo.filetype
+    vim.api.nvim_command(':CheatWithoutComments ' .. lang)
+  end, desc = "cheat.sh" },
 }
 
 local find = {
   ["<leader>fe"] = { "<cmd>Telescope live_grep<cr>", desc = "find words" },
+  ["<leader>fa"] = { "<cmd>Telescope find_files<cr>", desc = "find files" },
+  ["<leader>fc"] = {
+    function()
+      local cwd = vim.fn.stdpath "config" .. "/.."
+      local search_dirs = {}
+      for _, dir in ipairs(astronvim.supported_configs) do                      -- search all supported config locations
+        if dir == astronvim.install.home then dir = dir .. "/lua/user" end      -- don't search the astronvim core files
+        if vim.fn.isdirectory(dir) == 1 then table.insert(search_dirs, dir) end -- add directory to search if exists
+      end
+      if vim.tbl_isempty(search_dirs) then                                      -- if no config folders found, show warning
+        utils.notify("No user configuration files found", vim.log.levels.WARN)
+      else
+        if #search_dirs == 1 then cwd = search_dirs[1] end -- if only one directory, focus cwd
+        require("telescope.builtin").find_files {
+          prompt_title = "Config Files",
+          search_dirs = search_dirs,
+          cwd = cwd,
+        } -- call telescope
+      end
+    end,
+    desc = "Find AstroNvim config files",
+  },
   ["<leader>f,"] = { "<cmd>TodoTelescope<cr>", desc = "Find Todos" },
   ["<leader>f."] = { "<cmd>Telescope diagnostics<cr>", desc = "Find Diagnostics" },
 }
+
 local fix = {
   ["<leader>,"] = { name = "fix" },
   ["<leader>,t"] = { "<cmd>Telescope diagnostics<cr>", desc = "Diagnostics" },
@@ -116,6 +157,7 @@ local normal = function()
   tbl = assign(tbl, fix)
   tbl = assign(tbl, navigation)
   tbl = assign(tbl, fold)
+  tbl["<leader>;"] = { "<cmd>Alpha<cr>", desc = "Alpha" }
   return tbl
 end
 

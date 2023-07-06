@@ -7,9 +7,8 @@ return {
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		opts = {}
 	},
-	"nvim-treesitter/nvim-treesitter-context", -- function context on top
 	{
-		'nacro90/numb.nvim',
+		'nacro90/numb.nvim', -- show line numbers on the side
 		config = function()
 			require('numb').setup()
 		end
@@ -28,32 +27,6 @@ return {
 				open_if_max_closed = true, -- closing a fully closed fold will open it
 				close_if_max_opened = true, -- opening a fully open fold will close it
 			})
-		end
-	},
-	{
-		"zbirenbaum/copilot.lua",
-		event = { "VimEnter" },
-		config = function()
-			vim.defer_fn(function()
-				require("copilot").setup {
-					suggestion = {
-						enable = true,
-						auto_trigger = true,
-						keymap = {
-							next = "<C-h>",
-							prev = "<C-l>",
-							accept = "<C-c>"
-						},
-					}
-				}
-			end, 100)
-		end,
-	},
-	{
-		"zbirenbaum/copilot-cmp",
-		after = { "copilot.lua", "nvim-cmp" },
-		config = function()
-			require("copilot_cmp").setup()
 		end
 	},
 	{
@@ -80,38 +53,24 @@ return {
 			})
 		end
 	},
-	{
-		"windwp/nvim-spectre",
-		config = function() -- Super Search
-			require("spectre").setup({
-				mapping = {
-					['send_to_qf'] = {
-						map = "<leader>e",
-						cmd = "<cmd>lua require('spectre.actions').send_to_qf()<CR>",
-						desc = "send all item to quickfix"
-					},
-				}
-			})
-		end
-	},
 	{ 'kevinhwang91/nvim-bqf' }, -- BETTER quickfix
-	{
-		"kylechui/nvim-surround", --  the YSSR
-		version = "*",            -- Use for stability; omit to use `main` branch for the latest features
-		config = function()
-			require("nvim-surround").setup({
-				-- Configuration here, or leave empty to use defaults
-			})
-		end
-	},
-	{
-		"folke/tokyonight.nvim",
-		config = function()
-			require("tokyonight").setup({
-				transparent = true,
-				comments = { bold = true, italic = false },
-				keywords = { bold = true, italic = false },
-			})
-		end
-	},
+	-- {
+	-- 	"xiyaowong/transparent.nvim",
+	-- 	lazy = false,
+	-- 	config = function()
+	-- 		require("transparent").setup({
+	-- 			groups = { -- table: default groups
+	-- 				'Normal', 'NormalNC', 'Comment', 'Constant', 'Special', 'Identifier',
+	-- 				'Statement', 'PreProc', 'Type', 'Underlined', 'Todo', 'String', 'Function',
+	-- 				'Conditional', 'Repeat', 'Operator', 'Structure', 'LineNr', 'NonText',
+	-- 				'SignColumn', 'CursorLineNr', 'EndOfBuffer',
+	-- 			},
+	-- 			extra_groups = {
+	-- 				"NormalFloat", -- plugins which have float panel such as Lazy, Mason, LspInfo
+	-- 				"NvimTreeNormal", -- NvimTree
+	-- 				"NeoTreeNormal",
+	-- 			},
+	-- 		})
+	-- 	end,
+	-- },
 }

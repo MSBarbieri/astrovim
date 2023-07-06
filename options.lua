@@ -10,6 +10,8 @@ return {
     updatetime = 0,
     timeoutlen = 0,
     nu = true,
+    showtabline = 0,
+    winbar = nil,
   },
   g = {
     mapleader = " ",                 -- sets vim.g.mapleader
@@ -20,6 +22,7 @@ return {
     icons_enabled = true,            -- disable icons in the UI (disable if no nerd font is available, requires :PackerSync after changing)
     ui_notifications_enabled = true, -- disable notifications when toggling UI elements
     resession_enabled = true,        -- enable experimental resession.nvim session management (will be default in AstroNvim v4)
+    transparent_enabled = true
   },
 }
 -- If you need more control, you can use the function()...end notation
